@@ -1,0 +1,16 @@
+{
+  "name": "similar-server",
+  "version": "0.0.1",
+  "description": "similar http server",
+  "main": "index.js",
+  "files": ["index.js", "lib", "cli"],
+  "bin": "cli/index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "server"
+  ],
+  "author": "Holly Liu",
+  "license": "MIT"
+}
