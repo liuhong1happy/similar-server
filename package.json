@@ -1,6 +1,6 @@
 {
   "name": "similar-server",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "similar http server",
   "main": "index.js",
   "files": [
@@ -21,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "caporal": "^0.5.0",
-    "prompt": "^1.0.0"
+    "prompt": "^1.0.0",
+    "serve-static": "^1.12.1"
   }
 }
