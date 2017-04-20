@@ -3,8 +3,14 @@
   "version": "0.0.1",
   "description": "similar http server",
   "main": "index.js",
-  "files": ["index.js", "lib", "cli"],
-  "bin": "cli/index.js",
+  "files": [
+    "index.js",
+    "lib",
+    "cli"
+  ],
+  "bin": {
+    "similar-server-cli": "cli/index.js"
+  },
   "scripts": {
     "test": "test"
   },
@@ -12,5 +18,8 @@
     "server"
   ],
   "author": "Holly Liu",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "caporal": "^0.5.0"
+  }
 }
