@@ -1,6 +1,6 @@
 {
   "name": "similar-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "similar http server",
   "main": "index.js",
   "files": [
@@ -19,7 +19,7 @@
   ],
   "author": "Holly Liu",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "caporal": "^0.5.0"
   }
 }
