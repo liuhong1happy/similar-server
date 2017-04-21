@@ -1,5 +1,5 @@
 module.exports = {
-    Application: require('./lib/application'),
-    Route: require('./lib/route'),
-    Router: require('./lib/router')
+    Application: require('./dist/application'),
+    Route: require('./dist/route'),
+    Router: require('./dist/router')
 }

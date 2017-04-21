@@ -93,12 +93,13 @@ const createProject = function (name, options) {
       version: '0.0.1',
       private: true,
       scripts: {
-        start: 'node index.js',
+        start: 'nodemon index.js --exec babel-node',
       },
     };
     fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(packageJson));
     process.chdir(root);
-    const installCommand =  'npm install && npm install --save similar-server';
+    const installCommand =  'npm install && npm install --save similar-server && npm install --save-dev nodemon babel-cli babel-plugin-transform-decorators-legacy babel-preset-env babel-preset-power-assert';
+
     try {
         execSync(installCommand, {stdio: 'inherit'});
         console.error('Command `' + installCommand + '` exec.');
