@@ -1,23 +1,11 @@
-const SimpleServer = require('similar-server');
-const { Application, Route, Router, Controller } = SimpleServer;
-const app = SimpleServer.Application();
+const { Application, Route, Router } = require('similar-server');
+const Controller = require('similar-server/controller');
 
-class HomeIndexController extends Controller {
-    GET(req, res, next) {
-        res.setHeader('Content-Type', 'text/html');
-        res.setHeader('X-Foo', 'bar');
-        res.writeHead(200, {'Content-Type': 'text/plain'});
-        res.end('home-index');
-    }
-}
-
+const app = Application();
 app.router(Router('/',[
-    Route('home', [
-        Route('index', new HomeIndexController()),
-    ])   
+    Route('home', new HomeController())   
 ]));
-
+app.static('assets');
 app.init();
-
 app.listen(3002);
 
