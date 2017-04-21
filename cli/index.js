@@ -66,6 +66,7 @@ const createProject = function (name, options) {
     const cloneCommand = `git clone https://github.com/liuhong1happy/similar-server ${tmpRoot}`;
     try{
       execSync(cloneCommand, {stdio: 'inherit'});
+      console.error('Command `' + cloneCommand + '` exec.');
     } catch(err) {
       console.error(err);
       console.error('Command `' + cloneCommand + '` failed.');
@@ -78,6 +79,7 @@ const createProject = function (name, options) {
     const copyCommand =  `cp -rf ${tmplPath}/. ${root}`;
     try {
         execSync(copyCommand, {stdio: 'inherit'});
+        console.error('Command `' + copyCommand + '` exec.');
     } catch(err) {
       console.error(err);
       console.error('Command `' + copyCommand + '` failed.');
@@ -99,6 +101,7 @@ const createProject = function (name, options) {
     const installCommand =  'npm install && npm install --save similar-server';
     try {
         execSync(installCommand, {stdio: 'inherit'});
+        console.error('Command `' + installCommand + '` exec.');
     } catch(err) {
       console.error(err);
       console.error('Command `' + installCommand + '` failed.');
