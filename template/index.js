@@ -1,5 +1,5 @@
 const { Application, Route, Router } = require('similar-server');
-const Controller = require('similar-server/controller');
+const HomeController = require('./controllers/HomeController');
 
 const app = Application();
 app.router(Router('/',[
