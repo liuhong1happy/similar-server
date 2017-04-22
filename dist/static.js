@@ -30,20 +30,29 @@ module.exports = function (assetsDir) {
                         var ifModifiedSince = "If-Modified-Since".toLowerCase();
                         response.setHeader("Last-Modified", lastModified);
 
-                        if (ext.match(config.Expires.fileMatch)) {
+                        var Expires = {
+                            fileMatch: /^(gif|png|jpg|js|css)$/ig,
+                            maxAge: 60 * 60 * 24 * 365
+                        };
+                        var ext = path.extname(realPath);
+                        ext = ext ? ext.slice(1) : 'unknown';
+                        if (ext.match(Expires.fileMatch)) {
                             var expires = new Date();
-                            expires.setTime(expires.getTime() + config.Expires.maxAge * 1000);
+                            expires.setTime(expires.getTime() + Expires.maxAge * 1000);
                             response.setHeader("Expires", expires.toUTCString());
-                            response.setHeader("Cache-Control", "max-age=" + config.Expires.maxAge);
+                            response.setHeader("Cache-Control", "max-age=" + Expires.maxAge);
                         }
 
                         if (request.headers[ifModifiedSince] && lastModified == request.headers[ifModifiedSince]) {
                             response.writeHead(304, "Not Modified");
                             response.end();
                         } else {
+                            var Compress = {
+                                match: /css|js|html/ig
+                            };
                             var raw = fs.createReadStream(realPath);
                             var acceptEncoding = request.headers['accept-encoding'] || "";
-                            var matched = ext.match(config.Compress.match);
+                            var matched = ext.match(Compress.match);
 
                             if (matched && acceptEncoding.match(/\bgzip\b/)) {
                                 response.writeHead(200, "Ok", { 'Content-Encoding': 'gzip' });
