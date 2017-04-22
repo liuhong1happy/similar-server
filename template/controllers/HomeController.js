@@ -4,8 +4,8 @@ import HomeModel from '../models/HomeModel';
 
 class HomeController extends Controller {
     @RenderView('index.html')
-    GET(req, res, next) {
-        return new HomeModel();
+    GET(req, res, next, params) {
+        return new HomeModel(params);
     }
 }
 

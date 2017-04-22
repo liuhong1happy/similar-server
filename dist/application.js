@@ -46,6 +46,7 @@ var application = module.exports = function () {
             var stack = [];
             var routes = table.filter(function (route) {
                 var flag = matchLocation(route.location, url);
+                if (route.hanlder) route.hanlder.params = flag;
                 return flag;
             });
             return routes.map(function (route) {
@@ -63,7 +64,6 @@ var application = module.exports = function () {
         var next = function next() {
             var done = callback || function (req, res) {
                 res.setHeader('Content-Type', 'text/html');
-                res.setHeader('X-Foo', 'bar');
                 res.writeHead(404, { 'Content-Type': 'text/plain' });
                 res.end('ok');
             };
@@ -123,7 +123,9 @@ var application = module.exports = function () {
             });
         };
         createRoutes(app._router);
-        console.log('app.routeTable', app.routeTable);
+        app.routeTable.forEach(function (route) {
+            console.info('[ROUTE]', route.location, route.hanlder);
+        });
     };
 
     app.listen = function () {

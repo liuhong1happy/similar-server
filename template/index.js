@@ -3,7 +3,7 @@ const HomeController = require('./controllers/HomeController');
 
 const app = Application();
 app.router(Router('/',[
-    Route('home', new HomeController())   
+    Route('home/:id', new HomeController())
 ]));
 app.static('assets');
 app.init();

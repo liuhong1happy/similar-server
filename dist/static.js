@@ -15,7 +15,6 @@ module.exports = function (assetsDir) {
         response.setHeader("Server", "Node/V8");
         var pathname = obj.pathname;
         var realPath = path.join(assetsDir, path.normalize(pathname.replace(/\.\./g, "")));
-        console.log(realPath);
         var pathHandle = function pathHandle(realPath) {
             //用fs.stat方法获取文件
             fs.stat(realPath, function (err, stats) {
@@ -65,6 +64,7 @@ module.exports = function (assetsDir) {
                                 raw.pipe(response);
                             }
                         }
+                        console.info('[Static]', new Date().toString(), realPath);
                     }
                 }
             });
