@@ -6,7 +6,6 @@ var http = require('http');
 var Static = require('./static');
 var application = module.exports = function () {
     var app = function app(req, res) {
-        console.log('app', req, res);
         app.handle(req, res);
     };
 
@@ -60,7 +59,6 @@ var application = module.exports = function () {
     app.handle = function (req, res, callback) {
         // 匹配一批出来，组合成 next stack
         var stack = app.match(req.url);
-        console.log(stack);
         var idx = 0;
         var next = function next() {
             var done = callback || function (req, res) {

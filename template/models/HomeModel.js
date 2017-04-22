@@ -1,4 +1,4 @@
-import {Model} from 'similar-server/dist/model';
+import Model from 'similar-server/dist/model';
 
 class HomeModel extends Model {
     constructor(data) {

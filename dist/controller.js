@@ -11,8 +11,8 @@ module.exports = function () {
 
     _createClass(Controller, [{
         key: 'handle',
-        value: function handle(res, req, next) {
-            switch (res.method.toLowerCase()) {
+        value: function handle(req, res, next) {
+            switch (req.method.toLowerCase()) {
                 case 'get':
                     this.GET ? this.GET(req, res, next) : next();
                     break;

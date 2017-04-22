@@ -38,7 +38,6 @@ module.exports = function (assetsDir) {
                         }
 
                         if (request.headers[ifModifiedSince] && lastModified == request.headers[ifModifiedSince]) {
-                            console.log("从浏览器cache里取");
                             response.writeHead(304, "Not Modified");
                             response.end();
                         } else {

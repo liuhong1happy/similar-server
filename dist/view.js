@@ -16,8 +16,8 @@ function RenderView(view) {
       engine(path.resolve('views', view), model.getData(), options, function (err, data) {
         if (err) next();else {
           // 渲染页面
-          response.write(data);
-          response.end();
+          res.write(data);
+          res.end();
         }
       });
     };
