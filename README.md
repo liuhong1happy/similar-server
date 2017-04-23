@@ -52,8 +52,14 @@ app.plugin(session({
   saveUninitialized: true
 }))
 app.plugin(function (req, res, next) {
+  var views = req.session.views
+  if (!views) {
+    views = req.session.views = {}
+  }
+  // count the views
+  views[req.url] = (views[req.url] || 0) + 1
   // session
-  console.log('You viewed this page ' + req.session.views['/home/:id'] + ' times');
+  console.log('You viewed this page ' + req.session.views[req.url] + ' times');
   next()
 })
 app.listen(3002);
