@@ -11,6 +11,9 @@ var application = module.exports = function () {
 
     app.routeTable = [];
     app.routePlugins = [];
+    /**
+     * 匹配路由
+     */
     app.match = function (url) {
         var matchLocation = function matchLocation(location, url) {
             var locations = location.split("/");
@@ -56,7 +59,9 @@ var application = module.exports = function () {
         var handlers = parseUrlByRouteTable(app.routeTable, url);
         return app.routePlugins.concat(handlers);
     };
-
+    /**
+     * http 请求入口
+     */
     app.handle = function (req, res, callback) {
         // 匹配一批出来，组合成 next stack
         var stack = app.match(req.url);
@@ -87,19 +92,31 @@ var application = module.exports = function () {
     app.router = function (router) {
         app._router = router;
     };
-
+    /**
+     * 添加插件
+     */
     app.static = function (dir, engine) {
         app.routePlugins.push(Static(dir, engine));
     };
-
+    /**
+     * 添加插件
+     */
     app.plugin = function (_plugin) {
-        // 定义插件
         app.routePlugins.push(_plugin);
     };
-
+    // 添加路由
+    app.route = function (location, hanlder) {
+        app.routeTable.push({ location: location, hanlder: hanlder });
+    };
+    // 添加路由
+    app.use = function (location, hanlder) {
+        app.routeTable.push({ location: location, hanlder: hanlder });
+    };
+    /**
+     * 初始化路由和插件
+     */
     app.init = function () {
         // 解析路由
-        app.routeTable = [];
         app.routePlugins = app.routePlugins.concat(app._router.plugins || []);
         var createRoute = function createRoute(location, hanlder) {
             app.routeTable.push({ location: location, hanlder: hanlder });
@@ -125,6 +142,9 @@ var application = module.exports = function () {
         createRoutes(app._router);
         app.routeTable.forEach(function (route) {
             console.info('[ROUTE]', route.location, route.hanlder);
+        });
+        app.routePlugins.forEach(function (plugin) {
+            console.info('[PLUGINGS]', plugin);
         });
     };
 
