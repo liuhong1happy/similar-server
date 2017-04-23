@@ -7,4 +7,4 @@ class HomeModel extends Model {
     }
 }
 
-module.exports = HomeModel;
+export default HomeModel;
