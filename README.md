@@ -21,10 +21,48 @@
 
 4. Open [http://localhost:3002/home/Hello%20Similar%20Server!](http://localhost:3002/home/Hello%20Similar%20Server!)
 
+## Cookie
+
+``` js
+const cookieParser = require('cookie-parser');
+const Application = require('similar-server/dist/application');
+const app = Application();
+// cookie plugin
+app.plugin(cookieParser());
+app.plugin(function (req, res, next) {
+  // Cookies that have not been signed
+  console.log('Cookies: ', req.cookies)
+  // Cookies that have been signed
+  console.log('Signed Cookies: ', req.signedCookies)
+  next()
+})
+app.listen(3002);
+```
+
+## Session
+
+``` js
+const session = require('express-session')
+const Application = require('similar-server/dist/application');
+const app = Application();
+// session plugin
+app.plugin(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}))
+app.plugin(function (req, res, next) {
+  // session
+  console.log('You viewed this page ' + req.session.views['/home/:id'] + ' times');
+  next()
+})
+app.listen(3002);
+```
+
 ## Todo
 
-- [ ] Cookie
-- [ ] Session
+- [x] Cookie
+- [x] Session
 - [ ] ORM
 
 ## Contact
