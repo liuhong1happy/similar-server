@@ -95,10 +95,20 @@ const createProject = function (name, options) {
       scripts: {
         start: 'nodemon index.js --exec babel-node',
       },
+      dependencies: {
+        "mongoose": "^4.9.5",
+      },
+      devDependencies: {
+        "babel-cli": "^6.24.1",
+        "babel-plugin-transform-decorators-legacy": "^1.3.4",
+        "babel-preset-env": "^1.4.0",
+        "babel-preset-power-assert": "^1.0.0",
+        "nodemon": "^1.11.0"
+      }
     };
     fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(packageJson));
     process.chdir(root);
-    const installCommand =  'npm install && npm install --save similar-server && npm install --save-dev nodemon babel-cli babel-plugin-transform-decorators-legacy babel-preset-env babel-preset-power-assert';
+    const installCommand =  'npm install && npm install --save similar-server';
 
     try {
         execSync(installCommand, {stdio: 'inherit'});
