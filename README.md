@@ -65,12 +65,6 @@ app.plugin(function (req, res, next) {
 app.listen(3002);
 ```
 
-## Todo
-
-- [x] Cookie
-- [x] Session
-- [ ] ORM
-
 ## Contact
 
 Email: [liuhong1.happy@163.com](mailto:liuhong1.happy@163.com)

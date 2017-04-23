@@ -26,6 +26,33 @@ function RenderView(view) {
   };
 }
 
+function RenderAPI() {
+  return function (target, key, descriptor) {
+    var oldValue = descriptor.value;
+    descriptor.value = function (req, res, next, params) {
+      var promise = oldValue.apply(target, [req, res, next, params]);
+      var send = function send(data) {
+        // 返回页面
+        console.info('[API]', new Date().toString(), req.url);
+        res.setHeader('Content-Type', 'application/json');
+        res.write(data);
+        res.end();
+      };
+      if (promise instanceof global.Promise) {
+        promise.then(function (model) {
+          var data = model.getData();
+          res.write(JSON.stringify(data));
+          send(data);
+        });
+      } else {
+        send(promise.getData());
+      }
+    };
+    return descriptor;
+  };
+}
+
 module.exports = {
-  RenderView: RenderView
+  RenderView: RenderView,
+  RenderAPI: RenderAPI
 };
