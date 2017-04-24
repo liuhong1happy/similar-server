@@ -96,7 +96,7 @@ const router = Router('/',[
 当然，也可以使用旧的方式书写路由。
 
 ```js
-app.Route('/home/:id', new HomeController());
+app.route('/home/:id', new HomeController());
 ```
 
 ## 1.5. 区分插件和路由定义
