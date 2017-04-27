@@ -11,6 +11,10 @@ var application = module.exports = function () {
 
     app.routeTable = [];
     app.routePlugins = [];
+    app._router = {
+        plugins: [],
+        children: []
+    };
     /**
      * 匹配路由
      */
@@ -90,7 +94,7 @@ var application = module.exports = function () {
      * 定义路由
      */
     app.router = function (router) {
-        app._router = router;
+        app._router = router || app._router;
     };
     /**
      * 添加插件
@@ -122,12 +126,13 @@ var application = module.exports = function () {
             app.routeTable.push({ location: location, hanlder: hanlder });
         };
         var createRoutes = function createRoutes(root) {
-            createRoutesByChildren(root.children, root);
+            createRoutesByChildren(root.children || [], root);
         };
         var createRoutesByChildren = function createRoutesByChildren() {
             var children = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
             var root = arguments[1];
 
+            if (['router', 'route'].indexOf(root.type) === -1) return;
             var routes = [];
             if (!Array.isArray(children)) children = [children];
             children.forEach(function (child, index) {
@@ -152,5 +157,6 @@ var application = module.exports = function () {
         var server = http.createServer(this);
         return server.listen.apply(server, arguments);
     };
+
     return app;
 };
