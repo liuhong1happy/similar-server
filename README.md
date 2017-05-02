@@ -1,26 +1,35 @@
 # similar-server
 
-## Install
+[![Version](https://img.shields.io/npm/v/similar-server.svg)](https://www.npmjs.com/package/similar-server)
+[![Downloads](https://img.shields.io/npm/dt/similar-server.svg)](https://www.npmjs.com/package/similar-server)
+
+Node在ES6和ES7时代的Web Server
+
+## 安装
 
     npm install -g similar-server
 
-## Usage
+## 用法
 
-1. Create template project
+1. 命令行新建项目
 
         similar-server-cli AwesomeProject
 
-2. Start Server
+2. 启动Web服务
 
         cd AwesomeProject
         npm start
 
-4. Open [http://localhost:3002/home/Hello%20Similar%20Server!](http://localhost:3002/home/Hello%20Similar%20Server!)
+4. 在浏览器中打开 [http://localhost:3002/home/Hello%20Similar%20Server!](http://localhost:3002/home/Hello%20Similar%20Server!)
 
-## More about the server
+## 文档
 
-[More](docs/README.md)
+[文档](docs/README.md)
 
-## Contact
+## 联系
 
-Email: [liuhong1.happy@163.com](mailto:liuhong1.happy@163.com)
+邮件: [liuhong1.happy@163.com](mailto:liuhong1.happy@163.com)
+
+## 贡献
+
+欢迎有兴趣的朋友一起撸代码。

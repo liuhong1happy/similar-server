@@ -55,10 +55,12 @@ app.listen(3002);
 
 Similar Server设计之初就开始采用MVC框架，以便让开发人员快速开发项目。
 
-- Controller 调用Model渲染View/API
-- Model 调用Services获取数据库中数据
-- View 选用ejs模版作为默认模版引擎
-- Service 调取DBDriver获取数据库中数据
+- Model 定义数据类和数据库操作Model
+- DAO 通过数据库操作Model获取数据
+- Service 调取DAO获取数据，以便解耦
+- Controller 调取Service获取数据，渲染View/API
+- View 待渲染的静态页面，选用ejs模版作为默认模版引擎
+
 
 ## 1.3. 命令行工具快速创建项目
 
@@ -70,11 +72,6 @@ similar-server-cli AwesomeProject
 
 注：如果对创建的模版中的数据库不是很满意的，可以替换掉相应的代码。
 
-相应代码放置如下：
-
-1. 链接数据库 index.js utils/db.js
-2. 数据持久化 services/*
-3. 调取数据操作 model/*
 
 ## 1.4. 用一种独特的方式书写路由
 
@@ -101,7 +98,7 @@ app.route('/home/:id', new HomeController());
 
 ## 1.5. 区分插件和路由定义
 
-Similar Server和Express很大的不同，就在于Similar Server采用的设计区分插件和路由定义。
+Similar Server和Express很大的不同，就在于Similar Server采用的设计，区分插件(`plugin`)和路由(`route`)定义。
 
 1. 插件定义方式如下：
 
@@ -109,6 +106,9 @@ Similar Server和Express很大的不同，就在于Similar Server采用的设计
 app.plugin((req, res, next)=>{
     /**
     * do something
+    */
+    /**
+    * 必须调用next，否则后续路由将无法调到
     */
     next();
 })
@@ -162,7 +162,7 @@ npm start
 
 ## 3.1. Controller
 
-Controller主要的作用是，调取Model获取数据，并把数据渲染到页面或者API上去。
+Controller主要的作用把`数据`渲染到页面或者API上去。
 
 这里以HomeController和UserController中代码为例讲解。
 
@@ -174,21 +174,29 @@ Controller主要的作用是，调取Model获取数据，并把数据渲染到�
 */
 import Controller from 'similar-server/dist/controller';
 import { RenderView } from 'similar-server/dist/view';
-import HomeModel from '../models/HomeModel';
+import HomeService from '../models/HomeService';
 
 class HomeController extends Controller {
+    constructor(props, context) {
+        super(props, context);
+        this.service = new HomeService();
+    }
+    
     @RenderView('index.html')
     GET(req, res, next, params) {
-        return new HomeModel(params);
+        return this.service.getData(params);
     }
 }
+
 export default HomeController;
 ```
 
 首先我们看到的是HomeController中，对于页面的渲染很简单，采用RenderView装饰器即可渲染。
 
+注意：如果需要区分出Service层做解耦，Controller理应调取Service层代码。
+
 ```js
-@RenderView(path,engine)
+@RenderView(path, engine, options)
 ```
 
 RenderView中包含三个参数，第一个参数为`path`，传递的是对应的`views`文件夹下的html文件；第二个参数为engine，传递的是渲染view的模版引擎，engine定义如下：
@@ -210,12 +218,15 @@ const engine = (filePath, data, options, callback) => {
 */
 import Controller from 'similar-server/dist/controller';
 import { RenderAPI } from 'similar-server/dist/view';
-import UserModel from '../models/UserModel';
+import UserService from '../services/UserService';
 
 class UserController extends Controller {
+    constructor() {
+        this.services = new UserService();
+    }
     @RenderAPI()
     GET(req, res, next, params) {
-        const model = UserModel.queryUser(params.id);
+        const model = this.services.queryUser(params.id);
         return model;
     }
 }
@@ -223,11 +234,11 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-UserController GET方法仅仅渲染了一个API，和渲染View不同的是RenderView装饰器更换为了RenderAPI装饰器。
+UserController GET方法仅仅渲染了一个API，和渲染View不同的是`RenderView`装饰器更换为了`RenderAPI`装饰器。
 
 RenderAPI不用传递任何参数。
 
-当然，GET方法返回的结果仍然没有变化，返回model或者promise。
+当然，GET方法返回的结果仍然没有变化，返回`Model`或者`Promise`。
 
 ## 3.2. Model
 
@@ -255,7 +266,7 @@ export default HomeModel;
 
 ### 3.2.2. 数据库中的数据
 
-如果是要获取数据库中的数据，则需要和数据库驱动器打交道，当然涉及和数据库驱动器打交道的，我们会放置到Service层。
+如果是要获取数据库中的数据，则需要和数据库驱动器打交道，当然涉及和数据库驱动器打交道的，我们会放置到DAO层。
 
 ```js
 /** 
@@ -280,21 +291,36 @@ class ResultModel extends Model {
 }
 
 export default ResultModel;
+
 /** 
 * UserModel.js
 */
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
+const { ObjectId } = Schema;
+
+const UserSchema = new Schema({
+    name: String,
+    email: String,
+    password: String,
+    createDate: String, 
+    modifyDate: String,
+})
+
+export default mongoose.model('User', UserSchema);
+/** 
+* UserDAO.js
+*/
 import Model from 'similar-server/dist/model';
 import ResultModel from './ResultModel';
-import User from '../services/User';
+import UserModel from '../models/UserModel';
 
-class UserModel {
-    constructor(data) {
-        this.data = new User(data);
-    }
-    async save() {
+class UserDAO {
+    async save(data) {
+        const user = new UserModel(data);
         const result = new ResultModel();
         try{
-            const response = await this.data.save();
+            const response = await user.save();
             result.Data = response;
             result.Status = 'success';
         } catch(e) {
@@ -303,10 +329,10 @@ class UserModel {
         }
         return result;
     }
-    static async queryUser(id) {
+    async queryUser(id) {
         const result = new ResultModel();
         try{
-            const response = await User.findById(id).exec();
+            const response = await UserModel.findById(id).exec();
             result.Data = response;
             result.Status = 'success';
             return result;
@@ -320,9 +346,26 @@ class UserModel {
 }
 
 export default UserModel;
+
+/** 
+* UserService.js
+*/
+import UserDAO from '../dao/UserDAO';
+
+class UserService {
+    constructor() {
+        this.dao = new UserDAO();
+    }
+    queryUser(id) {
+        return this.dao.queryUser(id);
+    }
+    createUser(data) {
+        return this.dao.save(data);
+    }
+}
 ```
 
-UserModel中实现了所有需要对外的操作，这里包括save和queryUser，其中queryUser为静态方法，save为实例方法。
+UserDAO中实现了所有需要对外的操作，这里包括save和queryUser，其中queryUser为静态方法，save为实例方法。
 
 这里细心的同学，还会发现，我们这里利用了async/await实现异步，返回的结果为Promise对象。
 

@@ -1,5 +1,4 @@
 import UserDAO from '../dao/UserDAO';
-import UserModel from '../models/UserModel';
 
 class UserService {
     constructor() {
