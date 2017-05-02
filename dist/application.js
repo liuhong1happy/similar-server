@@ -149,7 +149,7 @@ var application = module.exports = function () {
             console.info('[ROUTE]', route.location, route.hanlder);
         });
         app.routePlugins.forEach(function (plugin) {
-            console.info('[PLUGINGS]', plugin);
+            console.info('[PLUGINGS]', plugin.name);
         });
     };
 
