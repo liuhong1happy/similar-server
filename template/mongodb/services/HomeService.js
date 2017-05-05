@@ -6,3 +6,5 @@ class HomeService {
         return model;
     }
 }
+
+export default HomeService;

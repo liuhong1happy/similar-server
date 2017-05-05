@@ -25,6 +25,11 @@
         - [4.3.1 文件下载](#431-文件下载)
         - [4.3.2 文件上传](#432-文件上传)
     - [4.4. 静态文件](#44-静态文件)
+    - [4.5. 打印日志](#45-打印日志)
+- [5. 常见问题解答](#5-常见问题解答)
+    - [5.1. Error: listen EADDRINUSE :::3002](#51-error-listen-eaddrinuse-3002)
+    - [5.2. MongoError: failed to connect to server [localhost:27017] on first connect [MongoError: connect ECONNREFUSED 127.0.0.1:27017]](#52-mongoerror-failed-to-connect-to-server-localhost27017-on-first-connect-mongoerror-connect-econnrefused-12700127017)
+    - [5.3. 如果我想更换数据库，不想使用mongodb的话怎么处理呐？](#53-如果我想更换数据库不想使用mongodb的话怎么处理呐)
 
 <!-- /TOC -->
 
@@ -64,14 +69,11 @@ Similar Server设计之初就开始采用MVC框架，以便让开发人员快速
 
 ## 1.3. 命令行工具快速创建项目
 
-similar-server-cli 初始化创建的项目中默认采用MVC框架，数据库对应采用mongodb。
+similar-server-cli 初始化创建的项目中默认采用MVC框架。
 
 ```cmd
-similar-server-cli AwesomeProject
+similar-server-cli init AwesomeProject
 ```
-
-注：如果对创建的模版中的数据库不是很满意的，可以替换掉相应的代码。
-
 
 ## 1.4. 用一种独特的方式书写路由
 
@@ -151,7 +153,13 @@ Similar Server一旦有http请求到达，会首先调取`所有插件`,接着�
 npm install -g similar-server 
 ```
 
-2. 运行server
+2. 构建新项目
+
+```cmd
+similar-server-cli init AwesomeProject
+```
+
+3. 运行server
 
 ```cmd
 cd AwesomeProject
@@ -501,3 +509,46 @@ app.static('assets');
 ```
 
 static函数参数只有一个，就是静态文件放置的路径。
+
+## 4.5. 打印日志
+
+打印日志操作可以使用log4js模块来实现特定功能：
+
+```js
+import log4js from 'log4js';
+
+log4js.configure({
+ appenders: [
+    {
+        type: 'DateFile',
+        filename: 'acess',
+        pattern: '-yyyy-MM-dd.log',
+        alwaysIncludePattern: true,
+        category: 'access'
+    }]
+});
+
+app.plugins(log4js.connectLogger(log4js.getLogger('access'), { level: log4js.levels.INFO }));
+```
+
+关于模块log4js的详细信息，请参考[https://github.com/nomiddlename/log4js-node](https://github.com/nomiddlename/log4js-node)
+
+# 5. 常见问题解答
+
+## 5.1. Error: listen EADDRINUSE :::3002
+
+答：此类情况多半是端口被占用造成的，请查询端口占用情况停掉当前占用端口的进程，或者另外独立启动一个未被占用的端口。
+
+如果你是mac或linux可以参考如下命令查询端口占用情况并停掉占用端口的进程。
+
+```shell
+lsof -i tcp:<port>
+kill -9 <pid>
+```
+## 5.2. MongoError: failed to connect to server [localhost:27017] on first connect [MongoError: connect ECONNREFUSED 127.0.0.1:27017]
+
+答：此类错误是你未安装mongodb造成的，请安装mongodb。
+
+## 5.3. 如果我想更换数据库，不想使用mongodb的话怎么处理呐？
+
+答：不选用mongodb，需要修改dao、model和utils/db.js 这几处代码，对上的services层可以起到解耦合作用。

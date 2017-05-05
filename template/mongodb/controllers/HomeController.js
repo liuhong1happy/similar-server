@@ -1,10 +1,10 @@
 import Controller from 'similar-server/dist/controller';
 import { RenderView } from 'similar-server/dist/view';
-import HomeService from '../models/HomeService';
+import HomeService from '../services/HomeService';
 
 class HomeController extends Controller {
-    constructor(props, context) {
-        super(props, context);
+    constructor() {
+        super();
         this.service = new HomeService();
     }
     

@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 const execSync = require('child_process').execSync;
+const packageJSON =  require('package.json');
 
 const validateProjectName = function (name) {
   if (!String(name).match(/^[$A-Z_][0-9A-Z_$]*$/i)) {
@@ -26,7 +27,8 @@ const validateProjectName = function (name) {
     process.exit(1);
   }
 }
-const createAfterConfirmation = function (name, options) {
+
+const createAfterConfirmation = function (name, template, options) {
   prompt.start();
 
   var property = {
@@ -39,7 +41,7 @@ const createAfterConfirmation = function (name, options) {
 
   prompt.get(property, function (err, result) {
     if (result.yesno[0] === 'y') {
-      createProject(name, options);
+      createProject(name, template, options);
     } else {
       console.log('Project initialization canceled');
       process.exit();
@@ -47,12 +49,12 @@ const createAfterConfirmation = function (name, options) {
   });
 }
 
-const createProject = function (name, options) {
+const createProject = function (name, template, options) {
   const curPath = path.resolve(__dirname);
   const tmpPath = os.tmpdir();
   const root = path.resolve(name);
   const tmpRoot = path.resolve(tmpPath, name);
-  const tmplPath = path.resolve(tmpRoot, 'template');
+  const tmplPath = path.resolve(tmpRoot, `template/${template}`);
   const projectName = path.basename(root);
 
   console.log(
@@ -95,9 +97,6 @@ const createProject = function (name, options) {
       scripts: {
         start: 'nodemon index.js --exec babel-node',
       },
-      dependencies: {
-        "mongoose": "^4.9.5",
-      },
       devDependencies: {
         "babel-cli": "^6.24.1",
         "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -109,7 +108,7 @@ const createProject = function (name, options) {
     fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(packageJson));
     process.chdir(root);
     const installCommand =  'npm install && npm install --save similar-server';
-
+    if(template==='mongodb') installCommand+= ' && npm install --save mongoose';
     try {
         execSync(installCommand, {stdio: 'inherit'});
         console.error('Command `' + installCommand + '` exec.');
@@ -131,18 +130,21 @@ const createProject = function (name, options) {
 }
 
 prog
-  .version('1.0.0')
+  .version(packageJSON.version)
   .description('A similar http server')
+  .command('init', 'Create new project') 
   .argument('<path>', 'Path to create')
+  .option('-t,--template <template>', 'Type of template', /^default|mongodb$/) 
   .action(function(args, options, logger) {
     const name = args.path;
+    const template = args.template || 'default';
     logger.info(name);
     // 克隆线上的代码到新创建的目录下
     validateProjectName(name);
     if (fs.existsSync(name)) {
-        createAfterConfirmation(name, options);
+        createAfterConfirmation(name, template, options);
     } else {
-        createProject(name, options);
+        createProject(name, template, options);
     }
   });
 

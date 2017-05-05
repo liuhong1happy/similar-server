@@ -1,10 +1,26 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var http = require('http');
-var Static = require('./static');
-var application = module.exports = function () {
+var _http = require('http');
+
+var _http2 = _interopRequireDefault(_http);
+
+var _static = require('./static');
+
+var _static2 = _interopRequireDefault(_static);
+
+var _colors = require('./colors');
+
+var _colors2 = _interopRequireDefault(_colors);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
     var app = function app(req, res) {
         app.handle(req, res);
     };
@@ -100,7 +116,7 @@ var application = module.exports = function () {
      * 添加插件
      */
     app.static = function (dir, engine) {
-        app.routePlugins.push(Static(dir, engine));
+        app.routePlugins.push((0, _static2.default)(dir, engine));
     };
     /**
      * 添加插件
@@ -112,9 +128,9 @@ var application = module.exports = function () {
     app.route = function (location, hanlder) {
         app.routeTable.push({ location: location, hanlder: hanlder });
     };
-    // 添加路由
-    app.use = function (location, hanlder) {
-        app.routeTable.push({ location: location, hanlder: hanlder });
+    // 添加插件
+    app.use = function (_plugin) {
+        app.routePlugins.push(_plugin);
     };
     /**
      * 初始化路由和插件
@@ -146,15 +162,15 @@ var application = module.exports = function () {
         };
         createRoutes(app._router);
         app.routeTable.forEach(function (route) {
-            console.info('[ROUTE]', route.location, route.hanlder);
+            console.info(_colors2.default.yellow, '[similar-server][ROUTE][' + route.location + ']', route.hanlder);
         });
         app.routePlugins.forEach(function (plugin) {
-            console.info('[PLUGINGS]', plugin.name);
+            console.info(_colors2.default.yellow, '[similar-server][PLUGINGS][' + plugin.name + ']');
         });
     };
 
     app.listen = function () {
-        var server = http.createServer(this);
+        var server = _http2.default.createServer(this);
         return server.listen.apply(server, arguments);
     };
 

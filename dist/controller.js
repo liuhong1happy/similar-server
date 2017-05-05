@@ -1,10 +1,21 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = undefined;
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colors = require('./colors');
+
+var _colors2 = _interopRequireDefault(_colors);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-module.exports = function () {
+var Controller = function () {
     function Controller() {
         _classCallCheck(this, Controller);
     }
@@ -26,7 +37,7 @@ module.exports = function () {
                     this.PUT ? PUT(req, res, next, this.params) : next();
                     break;
             }
-            console.info('[' + req.method.toUpperCase() + ']', new Date().toString(), req.url);
+            console.info(_colors2.default.green, '[similar-server][' + req.method.toUpperCase() + '][' + new Date().toLocaleString() + '][' + req.url + ']');
         }
     }, {
         key: 'GET',
@@ -52,3 +63,6 @@ module.exports = function () {
 
     return Controller;
 }();
+
+exports.default = Controller;
+;

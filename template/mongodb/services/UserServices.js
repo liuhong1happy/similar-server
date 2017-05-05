@@ -11,3 +11,5 @@ class UserService {
         return this.dao.save(data);
     }
 }
+
+export default UserService;

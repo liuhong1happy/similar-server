@@ -1,8 +1,12 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-module.exports = function () {
+exports.default = function () {
     var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '/';
     var handler = arguments[1];
     var plugings = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];

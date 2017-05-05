@@ -13,7 +13,7 @@ Node在ES6和ES7时代的Web Server
 
 1. 命令行新建项目
 
-        similar-server-cli AwesomeProject
+        similar-server-cli init AwesomeProject
 
 2. 启动Web服务
 

@@ -1,14 +1,17 @@
 import Controller from 'similar-server/dist/controller';
 import { RenderAPI } from 'similar-server/dist/view';
-import UserService from '../services/UserService';
+import ResultModel from '../models/ResultModel';
 
 class UserController extends Controller {
-    constructor() {
-        this.services = new UserService();
-    }
     @RenderAPI()
     GET(req, res, next, params) {
-        const model = this.services.queryUser(params.id);
+        const model = new ResultModel();
+        model.Status = 'success';
+        model.Data = {
+            firstName: 'Holly',
+            lastName: 'Liu'
+        };
+        model.Msg = '';
         return model;
     }
 }
