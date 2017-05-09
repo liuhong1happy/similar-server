@@ -18,6 +18,10 @@ var _colors = require('./colors');
 
 var _colors2 = _interopRequireDefault(_colors);
 
+var _proxy = require('./proxy');
+
+var _proxy2 = _interopRequireDefault(_proxy);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function () {
@@ -33,6 +37,7 @@ exports.default = function () {
     };
     /**
      * 匹配路由
+     * 1. 普通路由规则 /api/:api
      */
     app.match = function (url) {
         var matchLocation = function matchLocation(location, url) {
@@ -62,6 +67,16 @@ exports.default = function () {
             }
             return null;
         };
+        var matchRegexp = function matchRegexp(location, url) {
+            var reg = new RegExp(location, 'gmi');
+            var params = [];
+            var match = {};
+            reg.lastIndex = 0;
+            while (match = reg.exec(url)) {
+                params.push(match);
+            }
+            if (params.length === 0) return null;else return params;
+        };
         var parseUrlByRouteTable = function parseUrlByRouteTable() {
             var table = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
             var url = arguments[1];
@@ -69,6 +84,7 @@ exports.default = function () {
             var stack = [];
             var routes = table.filter(function (route) {
                 var flag = matchLocation(route.location, url);
+                if (!flag) flag = matchRegexp(route.location, url);
                 if (route.hanlder) route.hanlder.params = flag;
                 return flag;
             });
@@ -86,6 +102,7 @@ exports.default = function () {
         // 匹配一批出来，组合成 next stack
         var stack = app.match(req.url);
         var idx = 0;
+        res.setHeader("Server", "SimilarServer");
         var next = function next() {
             var done = callback || function (req, res) {
                 res.setHeader('Content-Type', 'text/html');
@@ -128,6 +145,13 @@ exports.default = function () {
     app.route = function (location, hanlder) {
         app.routeTable.push({ location: location, hanlder: hanlder });
     };
+
+    app.proxy = function (location, options) {
+        if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) !== 'object') throw new Error('param options must be an object');
+        if (typeof options.target !== 'string') throw new Error('options.target must be an proxy server\'s url');
+        app.routeTable.push({ location: location, hanlder: (0, _proxy2.default)(options) });
+    };
+
     // 添加插件
     app.use = function (_plugin) {
         app.routePlugins.push(_plugin);

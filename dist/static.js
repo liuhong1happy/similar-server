@@ -9,7 +9,6 @@ exports.default = function (assetsDir) {
 
     return function Static(request, response, next) {
         var obj = _url2.default.parse(request.url);
-        response.setHeader("Server", "Node/V8");
         var pathname = obj.pathname;
         var realPath = _path2.default.join(assetsDir, _path2.default.normalize(pathname.replace(/\.\./g, "")));
         var pathHandle = function pathHandle(realPath) {
