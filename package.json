@@ -6,7 +6,8 @@
   "files": [
     "index.js",
     "dist",
-    "cli"
+    "cli",
+    "docs"
   ],
   "bin": {
     "similar-server-cli": "cli/index.js"
