@@ -26,10 +26,11 @@
         - [4.3.2 文件上传](#432-文件上传)
     - [4.4. 静态文件](#44-静态文件)
     - [4.5. 打印日志](#45-打印日志)
+    - [4.6 代理服务](#46-代理服务)
 - [5. 常见问题解答](#5-常见问题解答)
     - [5.1. Error: listen EADDRINUSE :::3002](#51-error-listen-eaddrinuse-3002)
-    - [5.2. MongoError: failed to connect to server [localhost:27017] on first connect [MongoError: connect ECONNREFUSED 127.0.0.1:27017]](#52-mongoerror-failed-to-connect-to-server-localhost27017-on-first-connect-mongoerror-connect-econnrefused-12700127017)
-    - [5.3. 如果我想更换数据库，不想使用mongodb的话怎么处理呐？](#53-如果我想更换数据库不想使用mongodb的话怎么处理呐)
+    - [5.2. mongodb模版中报错](#52-mongodb模版中报错)
+    - [5.3. mongodb模版中，如果我想更换为其它数据库，不想使用mongodb的话怎么处理呐？](#53-mongodb模版中如果我想更换为其它数据库不想使用mongodb的话怎么处理呐)
 
 <!-- /TOC -->
 
@@ -139,11 +140,22 @@ Similar Server一旦有http请求到达，会首先调取`所有插件`,接着�
 
 如果都没有找到对应的插件和路由，则返回404。
 
+3. 其它方法定义归属类别
+
+1. app.proxy 路由
+2. app.static 插件
+3. app.use 插件 (同app.plugins)
+4. app.router 插件+路由 (会通过app.init方法解析出对应的插件和路由)
+
 ## 1.6. 关于路由匹配规则
 
-1. 路由暂不支持正则匹配
-2. 支持的规则包括：`/home/:id`和`/home/index`
+1. 路由支持正则匹配，能匹配类似`/api/(.+)`的路由。
+2. 普通路由解析支持的规则包括：`/home/:id`和`/home/index`。
 3. 解析的路由参数，会params传递给路由使用，当然Controller的方法也能拿到params。
+4. 路由规则解析的路由参数是标准的数组结构(Array)，其数组项是RegExp的exec方法返回的结果。
+5. 普通路由规则解析的参数，包含?后解析的参数加上`:<param>`匹配到的参数，其结构类型为对象结构(Object)。
+6. 路由匹配顺序是优先匹配普通路由，其次是匹配正则路由。
+7. 推荐采用普通路由匹配规则。
 
 # 2. 快速开始
 
@@ -158,6 +170,8 @@ npm install -g similar-server
 ```cmd
 similar-server-cli init AwesomeProject
 ```
+
+注意：从0.3.0版本开始，默认初始化`默认模版（default）`，如果需要初始化`mongodb模版（mongodb）`，需要在命令行中加入参数 `-t mongodb`，后续文档讲解以`mongodb模版（mongodb）`为例讲解为主。
 
 3. 运行server
 
@@ -533,6 +547,14 @@ app.plugins(log4js.connectLogger(log4js.getLogger('access'), { level: log4js.lev
 
 关于模块log4js的详细信息，请参考[https://github.com/nomiddlename/log4js-node](https://github.com/nomiddlename/log4js-node)
 
+## 4.6 代理服务
+
+默认提供了`http-proxy`代理服务，具体使用方式为：
+```js
+// http proxy
+app.proxy('/api/(.+)', {target: 'http://api.example.com'})
+```
+
 # 5. 常见问题解答
 
 ## 5.1. Error: listen EADDRINUSE :::3002
@@ -545,10 +567,12 @@ app.plugins(log4js.connectLogger(log4js.getLogger('access'), { level: log4js.lev
 lsof -i tcp:<port>
 kill -9 <pid>
 ```
-## 5.2. MongoError: failed to connect to server [localhost:27017] on first connect [MongoError: connect ECONNREFUSED 127.0.0.1:27017]
+## 5.2. mongodb模版中报错
+
+1. MongoError: failed to connect to server [localhost:27017] on first connect [MongoError: connect ECONNREFUSED 127.0.0.1:27017]
 
 答：此类错误是你未安装mongodb造成的，请安装mongodb。
 
-## 5.3. 如果我想更换数据库，不想使用mongodb的话怎么处理呐？
+## 5.3. mongodb模版中，如果我想更换为其它数据库，不想使用mongodb的话怎么处理呐？
 
 答：不选用mongodb，需要修改dao、model和utils/db.js 这几处代码，对上的services层可以起到解耦合作用。
