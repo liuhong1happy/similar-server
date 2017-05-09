@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 const execSync = require('child_process').execSync;
-const packageJSON =  require('package.json');
+const packJSON =  require('../package.json');
 
 const validateProjectName = function (name) {
   if (!String(name).match(/^[$A-Z_][0-9A-Z_$]*$/i)) {
@@ -130,7 +130,7 @@ const createProject = function (name, template, options) {
 }
 
 prog
-  .version(packageJSON.version)
+  .version(packJSON.version)
   .description('A similar http server')
   .command('init', 'Create new project') 
   .argument('<path>', 'Path to create')
