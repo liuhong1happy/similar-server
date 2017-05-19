@@ -11,3 +11,4 @@
 
 1. 新增proxy方法用于添加代理
 2. 新增正则路由匹配规则
+3. 新增多个模版mongodb、postgresql、default
