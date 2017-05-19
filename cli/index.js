@@ -109,6 +109,7 @@ const createProject = function (name, template, options) {
     process.chdir(root);
     const installCommand =  'npm install && npm install --save similar-server';
     if(template==='mongodb') installCommand+= ' && npm install --save mongoose';
+    if(template==='postgresql') installCommand+= ' && npm install --save sequelize pg pg-hstore';
     try {
         execSync(installCommand, {stdio: 'inherit'});
         console.error('Command `' + installCommand + '` exec.');
@@ -134,7 +135,7 @@ prog
   .description('A similar http server')
   .command('init', 'Create new project') 
   .argument('<path>', 'Path to create')
-  .option('-t,--template <template>', 'Type of template', /^default|mongodb$/) 
+  .option('-t,--template <template>', 'Type of template', /^default|mongodb|postgresql$/) 
   .action(function(args, options, logger) {
     const name = args.path;
     const template = args.template || 'default';

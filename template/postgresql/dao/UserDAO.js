@@ -4,7 +4,7 @@ import UserModel from '../models/UserModel';
 
 class UserDAO {
     async save(data) {
-        const user = UserModel.build(data)
+        const user = new UserModel(data);
         const result = new ResultModel();
         try{
             const response = await user.save();
@@ -19,7 +19,7 @@ class UserDAO {
     async queryUser(id) {
         const result = new ResultModel();
         try{
-            const response = await UserModel.findById(id);
+            const response = await UserModel.findById(id).exec();
             result.Data = response;
             result.Status = 'success';
             return result;
