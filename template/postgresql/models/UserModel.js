@@ -1,4 +1,4 @@
-const UserModel = sequelize.define('User', {
+const UserModel = global.sequelize.define('User', {
   name: {
     type: Sequelize.STRING
   },

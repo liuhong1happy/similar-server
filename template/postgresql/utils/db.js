@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 export default {
     init: ()=>{
         const sequelize = new Sequelize('postgres://root:123456@localhost:5432/admin');
-        const isConnected = false;
+        let isConnected = false;
         // 预链接
         sequelize
         .authenticate()

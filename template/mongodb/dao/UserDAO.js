@@ -32,4 +32,4 @@ class UserDAO {
     }
 }
 
-export default UserModel;
+export default UserDAO;

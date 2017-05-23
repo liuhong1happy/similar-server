@@ -107,7 +107,7 @@ const createProject = function (name, template, options) {
     };
     fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(packageJson));
     process.chdir(root);
-    const installCommand =  'npm install && npm install --save similar-server';
+    let installCommand =  'npm install && npm install --save similar-server';
     if(template==='mongodb') installCommand+= ' && npm install --save mongoose';
     if(template==='postgresql') installCommand+= ' && npm install --save sequelize pg pg-hstore';
     try {
@@ -138,7 +138,7 @@ prog
   .option('-t,--template <template>', 'Type of template', /^default|mongodb|postgresql$/) 
   .action(function(args, options, logger) {
     const name = args.path;
-    const template = args.template || 'default';
+    const template = options.template || 'default';
     logger.info(name);
     // 克隆线上的代码到新创建的目录下
     validateProjectName(name);
