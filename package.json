@@ -1,6 +1,6 @@
 {
   "name": "similar-server",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "similar http server",
   "main": "index.js",
   "files": [

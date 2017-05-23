@@ -18,6 +18,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Controller = function () {
     function Controller() {
         _classCallCheck(this, Controller);
+
+        if (this.__proto__.Routes && this.__proto__.Routes.length > 0) {
+            this.children = this.__proto__.Routes;
+        }
     }
 
     _createClass(Controller, [{

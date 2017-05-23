@@ -64,7 +64,46 @@ function RenderAPI() {
   };
 }
 
+function Method(path, method) {
+  return function (target, key, descriptor) {
+    var oldValue = descriptor.value;
+    descriptor.value = function (req, res, next, params) {
+      if (req.method.toUpperCase() !== method.toUpperCase()) {
+        next();
+        return;
+      }
+      oldValue.apply(target, [req, res, next, descriptor.value.params]);
+    };
+
+    target.Routes = target.Routes || [];
+    target.Routes.push({ path: path, children: [descriptor.value], type: 'route', plugins: [] });
+
+    return descriptor;
+  };
+}
+
+function Post(path) {
+  return Method(path, 'post');
+}
+
+function Get(path) {
+  return Method(path, 'get');
+}
+
+function Put(path) {
+  return Method(path, 'put');
+}
+
+function Delete(path) {
+  return Method(path, 'delete');
+}
+
 module.exports = {
   RenderView: RenderView,
-  RenderAPI: RenderAPI
+  RenderAPI: RenderAPI,
+  Method: Method,
+  Post: Post,
+  Get: Get,
+  Delete: Delete,
+  Put: Put
 };

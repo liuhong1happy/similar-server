@@ -176,6 +176,11 @@ exports.default = function () {
             var routes = [];
             if (!Array.isArray(children)) children = [children];
             children.forEach(function (child, index) {
+                if (Array.isArray(child.children) && !child.path) {
+                    createRoutesByChildren(child.children, root);
+                    createRoute(root.location, child);
+                    return;
+                }
                 if (Array.isArray(child.children)) {
                     if (root.type == 'router') child.location = '/' + child.path;else child.location = root.location + '/' + child.path;
                     createRoutesByChildren(child.children, child);
