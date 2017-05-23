@@ -5,7 +5,7 @@ DBUtils.init();
 
 const app = Application();
 // router
-app.router(require('./router'));
+app.router(require('./router').default);
 // static plugin
 app.static('assets');
 // init routes & plugins
