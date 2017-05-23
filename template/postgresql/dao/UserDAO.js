@@ -1,5 +1,5 @@
 import Model from 'similar-server/dist/model';
-import ResultModel from './ResultModel';
+import ResultModel from '../models/ResultModel';
 import UserModel from '../models/UserModel';
 
 class UserDAO {
