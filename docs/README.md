@@ -571,10 +571,13 @@ app.plugins(log4js.connectLogger(log4js.getLogger('access'), { level: log4js.lev
 ## 4.6 代理服务
 
 默认提供了`http-proxy`代理服务，具体使用方式为：
+
 ```js
 // http proxy
 app.proxy('/api/(.+)', {target: 'http://api.example.com'})
 ```
+
+以`/api/`打头的路由，都会代理到`http://api.example.com`。
 
 # 5. 常见问题解答
 
