@@ -9,6 +9,7 @@
     - [1.4. 用一种独特的方式书写路由](#14-用一种独特的方式书写路由)
     - [1.5. 区分插件和路由定义](#15-区分插件和路由定义)
     - [1.6. 关于路由匹配规则](#16-关于路由匹配规则)
+    - [1.7 Controller支持自定义方法](#17-controller支持自定义方法)
 - [2. 快速开始](#2-快速开始)
 - [3. 理解Similar Server中的MVC框架](#3-理解similar-server中的mvc框架)
     - [3.1. Controller](#31-controller)
@@ -59,14 +60,13 @@ app.listen(3002);
 
 ## 1.2. 采用MVC框架
 
-Similar Server设计之初就开始采用MVC框架，以便让开发人员快速开发项目。
+`Similar Server的模版`设计之初就开始采用`MVC框架`，以便让开发人员快速开发项目。
 
 - Model 定义数据类和数据库操作Model
 - DAO 通过数据库操作Model获取数据
 - Service 调取DAO获取数据，以便解耦
 - Controller 调取Service获取数据，渲染View/API
 - View 待渲染的静态页面，选用ejs模版作为默认模版引擎
-
 
 ## 1.3. 命令行工具快速创建项目
 
@@ -157,6 +157,31 @@ Similar Server一旦有http请求到达，会首先调取`所有插件`,接着�
 6. 路由匹配顺序是优先匹配普通路由，其次是匹配正则路由。
 7. 推荐采用普通路由匹配规则。
 
+## 1.7 Controller支持自定义方法
+
+Controller中除POST、GET、PUT、DELETE方法外，也可以支持自定义方法的实现，自定义方法对应特定路由和method。具体实现方式如下
+
+```js
+//...
+class UserController extends Controller {
+    //...
+    @Get('login')
+    @RenderAPI()
+    Login(req, res, next, params) {
+        const model = services.queryUser(params.id);
+        return model;
+    }
+    //...
+}
+
+假设UserController实例对应的路由为`/user`，则带`Get装饰器`和`RenderAPI装饰器`的自定义方法`Login`，对应的路由为`/user/login`。
+
+注意：`Get装饰器`需要在`RenderAPI装饰器`之前定义。
+
+export default UserController;
+```
+
+
 # 2. 快速开始
 
 1. 全局安装Similar Server
@@ -196,24 +221,21 @@ Controller主要的作用把`数据`渲染到页面或者API上去。
 */
 import Controller from 'similar-server/dist/controller';
 import { RenderView } from 'similar-server/dist/view';
-import HomeService from '../models/HomeService';
+import HomeService from '../services/HomeService';
+
+const service = new HomeService();
 
 class HomeController extends Controller {
-    constructor(props, context) {
-        super(props, context);
-        this.service = new HomeService();
-    }
-    
     @RenderView('index.html')
     GET(req, res, next, params) {
-        return this.service.getData(params);
+        return service.getData(params);
     }
 }
 
 export default HomeController;
 ```
 
-首先我们看到的是HomeController中，对于页面的渲染很简单，采用RenderView装饰器即可渲染。
+首先我们看到的是HomeController中，对于页面的渲染很简单，采用`RenderView装饰器`即可渲染。
 
 注意：如果需要区分出Service层做解耦，Controller理应调取Service层代码。
 
@@ -242,13 +264,12 @@ import Controller from 'similar-server/dist/controller';
 import { RenderAPI } from 'similar-server/dist/view';
 import UserService from '../services/UserService';
 
+const services = new UserService();
+
 class UserController extends Controller {
-    constructor() {
-        this.services = new UserService();
-    }
     @RenderAPI()
     GET(req, res, next, params) {
-        const model = this.services.queryUser(params.id);
+        const model = services.queryUser(params.id);
         return model;
     }
 }
@@ -256,7 +277,7 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-UserController GET方法仅仅渲染了一个API，和渲染View不同的是`RenderView`装饰器更换为了`RenderAPI`装饰器。
+UserController GET方法仅仅渲染了一个API，和渲染View不同的是`RenderView装饰器`更换为了`RenderAPI装饰器`。
 
 RenderAPI不用传递任何参数。
 
@@ -391,7 +412,7 @@ UserDAO中实现了所有需要对外的操作，这里包括save和queryUser，
 
 这里细心的同学，还会发现，我们这里利用了async/await实现异步，返回的结果为Promise对象。
 
-当然，你不用操心处理Promise的问题，RenderAPI装饰器中可以对Promise进行处理。
+当然，你不用操心处理Promise的问题，`RenderAPI装饰器`中可以对`Promise`进行处理。
 
 ## 3.3 View
 
