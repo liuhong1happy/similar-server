@@ -54,7 +54,7 @@ const createProject = function (name, template, options) {
   const tmpPath = os.tmpdir();
   const root = path.resolve(name);
   const tmpRoot = path.resolve(tmpPath, name);
-  const tmplPath = path.resolve(tmpRoot, `template/${template}`);
+  const tmplPath = path.resolve(tmpRoot, `template/${packJSON.version}/${template}`);
   const projectName = path.basename(root);
 
   console.log(
@@ -99,17 +99,22 @@ const createProject = function (name, template, options) {
       },
       devDependencies: {
         "babel-cli": "^6.24.1",
+        "babel-loader": "^7.0.0",
         "babel-plugin-transform-decorators-legacy": "^1.3.4",
         "babel-preset-env": "^1.4.0",
         "babel-preset-power-assert": "^1.0.0",
-        "nodemon": "^1.11.0"
+        "nodemon": "^1.11.0",
+        "webpack": "^2.6.0"
+      },
+      dependencies: {
+        "babel-polyfill": "^6.23.0",
       }
     };
     fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(packageJson));
     process.chdir(root);
     let installCommand =  'npm install && npm install --save similar-server';
     if(template==='mongodb') installCommand+= ' && npm install --save mongoose';
-    if(template==='postgresql') installCommand+= ' && npm install --save sequelize pg pg-hstore';
+    if(template==='postgresql') installCommand+= ' && npm install --save sequelize pg pg-hstore pg-native';
     try {
         execSync(installCommand, {stdio: 'inherit'});
         console.error('Command `' + installCommand + '` exec.');

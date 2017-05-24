@@ -32,6 +32,7 @@
     - [5.1. Error: listen EADDRINUSE :::3002](#51-error-listen-eaddrinuse-3002)
     - [5.2. mongodb模版中报错](#52-mongodb模版中报错)
     - [5.3. mongodb模版中，如果我想更换为其它数据库，不想使用mongodb的话怎么处理呐？](#53-mongodb模版中如果我想更换为其它数据库不想使用mongodb的话怎么处理呐)
+- [6. 发布项目](#6-发布项目)
 
 <!-- /TOC -->
 
@@ -600,3 +601,20 @@ kill -9 <pid>
 ## 5.3. mongodb模版中，如果我想更换为其它数据库，不想使用mongodb的话怎么处理呐？
 
 答：不选用mongodb，需要修改dao、model和utils/db.js 这几处代码，对上的services层可以起到解耦合作用。
+
+# 6. 发布项目
+
+1. webpack打包发布
+
+开发环境的开发用到了babel，所有我们需要打包部署，这里优先选择的工具为webpack。
+
+你仅仅需要执行`webpack`命令，即可打包。
+
+打包好的文件会自动放置`/bin/www`。
+
+注意：打包之前，你需要对生产环境做相应的配置修改，这里就不在赘述。
+
+2. 执行生产环境
+
+运行 `node /bin/www` 或者`pm2 start /bin/www`，即可运行生产环境下的web应用。
+
