@@ -19,6 +19,7 @@ var Controller = function () {
     function Controller() {
         _classCallCheck(this, Controller);
 
+        // 来自controller的特定方法构建Routes
         if (this.__proto__.Routes && this.__proto__.Routes.length > 0) {
             this.children = this.__proto__.Routes;
         }
