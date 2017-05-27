@@ -140,7 +140,7 @@ prog
   .description('A similar http server')
   .command('init', 'Create new project') 
   .argument('<path>', 'Path to create')
-  .option('-t,--template <template>', 'Type of template', /^default|mongodb|postgresql$/) 
+  .option('-t,--template <template>', 'Type of template', /^default|mongodb|postgresql|markdown$/) 
   .action(function(args, options, logger) {
     const name = args.path;
     const template = options.template || 'default';
