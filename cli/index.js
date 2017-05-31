@@ -53,8 +53,8 @@ const createProject = function (name, template, options) {
   const curPath = path.resolve(__dirname);
   const tmpPath = os.tmpdir();
   const root = path.resolve(name);
-  const tmpRoot = path.resolve(tmpPath, name);
-  const tmplPath = path.resolve(tmpRoot, `template/${packJSON.version}/${template}`);
+  const tmpRoot = path.resolve(`${tmpPath}/${packJSON.version}`, name);
+  const tmplPath = path.resolve(tmpRoot, `template/${template}`);
   const projectName = path.basename(root);
 
   console.log(
