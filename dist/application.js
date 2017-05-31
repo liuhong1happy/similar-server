@@ -84,6 +84,10 @@ exports.default = function () {
 
             var stack = [];
             var routes = table.filter(function (route) {
+                if (!route.location) {
+                    console.info(_colors2.default.red, '[similar-server][WARNNING]route.location is undefined');
+                    return null;
+                }
                 var flag = matchLocation(route.location, url);
                 if (!flag) flag = matchRegexp(route.location, url);
                 if (route.hanlder) route.hanlder.params = flag;
@@ -178,7 +182,7 @@ exports.default = function () {
             if (!Array.isArray(children)) children = [children];
             children.forEach(function (child, index) {
                 // 由Controller自定义方法构建，构建自身Controller的同时，需要构建Controller自定义方法
-                if (Array.isArray(child.children) && !child.path) {
+                if (Array.isArray(child.children) && child.path === undefined) {
                     createRoutesByChildren(child.children, root);
                     createRoute(root.location, child);
                     return;
