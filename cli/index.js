@@ -115,6 +115,7 @@ const createProject = function (name, template, options) {
     let installCommand =  'npm install && npm install --save similar-server';
     if(template==='mongodb') installCommand+= ' && npm install --save mongoose';
     if(template==='postgresql') installCommand+= ' && npm install --save sequelize pg pg-hstore pg-native';
+    if(template==='websocket') installCommand+= ' && npm install --save socket.io';
     try {
         execSync(installCommand, {stdio: 'inherit'});
         console.error('Command `' + installCommand + '` exec.');
@@ -140,7 +141,7 @@ prog
   .description('A similar http server')
   .command('init', 'Create new project') 
   .argument('<path>', 'Path to create')
-  .option('-t,--template <template>', 'Type of template', /^default|mongodb|postgresql|markdown$/) 
+  .option('-t,--template <template>', 'Type of template', /^default|mongodb|postgresql|markdown|websocket$/) 
   .action(function(args, options, logger) {
     const name = args.path;
     const template = options.template || 'default';

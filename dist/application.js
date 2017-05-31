@@ -221,7 +221,6 @@ exports.default = function () {
 
     app.listen = function () {
         var server = _http2.default.createServer(this);
-        app.server = server;
         return server.listen.apply(server, arguments);
     };
 

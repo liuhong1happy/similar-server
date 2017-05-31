@@ -13,3 +13,8 @@
 2. 新增正则路由匹配规则
 3. 新增多个模版mongodb、postgresql、default
 4. 新增Controller自定义方法
+
+## 0.4.*
+
+1. 新增多个模版websocket、markdown
+2. 完善正则路由匹配规则
