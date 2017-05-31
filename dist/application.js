@@ -149,7 +149,7 @@ exports.default = function () {
 
     app.proxy = function (location, options) {
         if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) !== 'object') throw new Error('param options must be an object');
-        if (typeof options.target !== 'string') throw new Error('options.target must be an proxy server\'s url');
+        if (typeof options.target !== 'string') throw new Error('options.target must be a proxy server\'s url');
         app.routeTable.push({ location: location, hanlder: (0, _proxy2.default)(options) });
     };
 
@@ -203,6 +203,7 @@ exports.default = function () {
 
     app.listen = function () {
         var server = _http2.default.createServer(this);
+        app.server = server;
         return server.listen.apply(server, arguments);
     };
 

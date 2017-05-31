@@ -5,8 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (assetsDir) {
-    var engine = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _ejs2.default;
-
     return function Static(request, response, next) {
         var obj = _url2.default.parse(request.url);
         var pathname = obj.pathname;
@@ -20,6 +18,9 @@ exports.default = function (assetsDir) {
                     if (stats.isDirectory()) {
                         next();
                     } else {
+                        var ext = _path2.default.extname(realPath);
+                        ext = ext ? ext.slice(1) : 'unknown';
+
                         var contentType = _mime2.default.lookup(realPath) || "text/plain";
                         response.setHeader("Content-Type", contentType);
 
@@ -31,8 +32,7 @@ exports.default = function (assetsDir) {
                             fileMatch: /^(gif|png|jpg|js|css)$/ig,
                             maxAge: 60 * 60 * 24 * 365
                         };
-                        var ext = _path2.default.extname(realPath);
-                        ext = ext ? ext.slice(1) : 'unknown';
+
                         if (ext.match(Expires.fileMatch)) {
                             var expires = new Date();
                             expires.setTime(expires.getTime() + Expires.maxAge * 1000);
