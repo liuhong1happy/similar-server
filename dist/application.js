@@ -76,23 +76,37 @@ exports.default = function () {
             while (match = reg.exec(url)) {
                 params.push(match);
             }
-            if (params.length === 0) return null;else return params;
+            if (params.length === 0) return null;else return [].concat(params);
         };
         var parseUrlByRouteTable = function parseUrlByRouteTable() {
             var table = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
             var url = arguments[1];
 
             var stack = [];
+            // 匹配普通路由
             var routes = table.filter(function (route) {
                 if (!route.location) {
                     console.info(_colors2.default.red, '[similar-server][WARNNING]route.location is undefined');
                     return null;
                 }
                 var flag = matchLocation(route.location, url);
-                if (!flag) flag = matchRegexp(route.location, url);
                 if (route.hanlder) route.hanlder.params = flag;
                 return flag;
             });
+            // 普通路由未匹配上，则开启正则路由匹配
+            // 原则上按照匹配到数量，递增排序
+            if (routes.length === 0) {
+                routes = table.filter(function (route) {
+                    var flag = matchRegexp(route.location, url);
+                    if (route.hanlder) route.hanlder.params = flag;
+                    route.flag = flag;
+                    return flag;
+                });
+                routes.sort(function (a, b) {
+                    return a.flag.length > b.flag.length;
+                });
+            }
+
             return routes.map(function (route) {
                 return route.hanlder;
             });
