@@ -8,7 +8,7 @@ const execSync = require('child_process').execSync;
 const packJSON =  require('../package.json');
 
 const validateProjectName = function (name) {
-  if (!String(name).match(/^[$A-Z_][0-9A-Z_$]*$/i)) {
+  if (!String(name).match(/^[$A-Z_\-][0-9A-Z_\-$]*$/i)) {
     console.error(
       '"%s" is not a valid name for a project. Please use a valid identifier ' +
         'name (alphanumeric).',
@@ -27,7 +27,7 @@ const validateProjectName = function (name) {
   }
 }
 
-const deployAfterConfirmation = function (name, template, options) {
+const deployAfterConfirmation = function (server, name, tool, options) {
   prompt.start();
 
   var property = {
@@ -40,7 +40,7 @@ const deployAfterConfirmation = function (name, template, options) {
 
   prompt.get(property, function (err, result) {
     if (result.yesno[0] === 'y') {
-      createProject(name, template, options);
+      deployProject(server, name, tool, options);
     } else {
       console.log('Project initialization canceled');
       process.exit();
@@ -76,7 +76,7 @@ const deployProject = function (server, name, tool, options) {
 
   const copy = function() {
     process.chdir(curPath);
-    const copyCommand =  `cp -rf ${tmplPath}/. ${root}`;
+    const copyCommand =  `cp -rf ${tmpRoot}/. ${root}`;
     try {
         execSync(copyCommand, {stdio: 'inherit'});
         console.error('Command `' + copyCommand + '` exec.');
@@ -95,6 +95,8 @@ const deployProject = function (server, name, tool, options) {
         "watch": [  // 监控变化的目录，一旦变化，自动重启
             "bin",
         ],
+        "exec_mode" : "cluster",
+        "instances": 0,
         "ignore_watch" : [  // 从监控目录中排除
             "node_modules", 
             "logs",
@@ -111,7 +113,7 @@ const deployProject = function (server, name, tool, options) {
     };
     fs.writeFileSync(path.join(root, 'app.json'), JSON.stringify(script));
     process.chdir(root);
-    const deployCommand = 'pm2 start app.json';
+    const deployCommand = 'npm install && webpack && pm2 delete ' + name + '&& pm2 start app.json';
     try {
         execSync(deployCommand, {stdio: 'inherit'});
         console.error('Command `' + deployCommand + '` exec.');

@@ -33,6 +33,8 @@
     - [5.2. mongodb模版中报错](#52-mongodb模版中报错)
     - [5.3. mongodb模版中，如果我想更换为其它数据库，不想使用mongodb的话怎么处理呐？](#53-mongodb模版中如果我想更换为其它数据库不想使用mongodb的话怎么处理呐)
 - [6. 发布项目](#6-发布项目)
+    - [手动发布](#手动发布)
+    - [命令行发布](#命令行发布)
 
 <!-- /TOC -->
 
@@ -604,6 +606,8 @@ kill -9 <pid>
 
 # 6. 发布项目
 
+## 手动发布
+
 1. webpack打包发布
 
 开发环境的开发用到了babel，所有我们需要打包部署，这里优先选择的工具为webpack。
@@ -618,3 +622,16 @@ kill -9 <pid>
 
 运行 `node /bin/www` 或者`pm2 start /bin/www`，即可运行生产环境下的web应用。
 
+## 命令行发布
+
+1. 发布要求
+
+发布之前，需要全局安装pm2
+
+    npm install -g pm2
+
+2. 执行发布
+
+    similar-server-cli deploy https://github.com/<user-name>/<project-name>.git <deploy-name> -y
+
+注意：自版本0.4.1开始，具有发布功能。

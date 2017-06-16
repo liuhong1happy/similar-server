@@ -94,7 +94,7 @@ const createProject = function (name, template, options) {
       version: '0.0.1',
       private: true,
       scripts: {
-        start: 'nodemon index.js --exec babel-node',
+        start: 'nodemon index.js --exec babel-node'
       },
       devDependencies: {
         "babel-cli": "^6.24.1",

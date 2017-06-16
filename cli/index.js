@@ -17,13 +17,15 @@ prog
   .command('init', 'Create new project') 
   .argument('<path>', 'Path to create')
   .option('-t,--template <template>', 'Type of template', /^default|mongodb|postgresql|markdown|websocket$/) 
+  .option('-y,--yes <yes>', 'don\'t comfirm to create after', prog.BOOL, false, false)
   .action(function(args, options, logger) {
     const name = args.path;
     const template = options.template || 'default';
+    const yes = options.yes;
     logger.info(name);
     // 克隆线上的代码到新创建的目录下
     installCommand.validateProjectName(name);
-    if (fs.existsSync(name)) {
+    if (!yes && fs.existsSync(name)) {
         installCommand.createAfterConfirmation(name, template, options);
     } else {
         installCommand.createProject(name, template, options);
@@ -33,16 +35,19 @@ prog
   .argument('<server>', 'Git server')
   .argument('<path>', 'Path to deploy')
   .option('-t,--tool <tool>', 'Start up tool', /^pm2$/)
+  .option('-y,--yes <yes>', 'don\'t comfirm to create after', prog.BOOL, false, false)
   .action(function(args, options, logger) {
     const name = args.path;
     const server = args.server;
     const tool = options.tool || 'pm2';
+    const yes = options.yes;
+    logger.info(name);
     // 克隆线上的代码到新创建的目录下
     deployCommand.validateProjectName(name);
-    if (fs.existsSync(name)) {
-        deployCommand.deployAfterConfirmation(name, template, options);
+    if (!yes && fs.existsSync(name)) {
+        deployCommand.deployAfterConfirmation(server, name, tool, options);
     } else {
-        deployCommand.deployProject(name, template, options);
+        deployCommand.deployProject(server, name, tool, options);
     }
   });
 
