@@ -116,6 +116,7 @@ const createProject = function (name, template, options) {
     let installCommand =  'npm install && npm install --save similar-server';
     if(template==='mongodb') installCommand+= ' && npm install --save mongoose';
     if(template==='postgresql') installCommand+= ' && npm install --save sequelize pg pg-hstore pg-native';
+    if(template==='mysql') installCommand+= ' && npm install --save sequelize mysql mysql2';
     if(template==='websocket') installCommand+= ' && npm install --save socket.io';
     try {
         execSync(installCommand, {stdio: 'inherit'});

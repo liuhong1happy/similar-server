@@ -16,7 +16,7 @@ prog
   .description('A similar http server')
   .command('init', 'Create new project') 
   .argument('<path>', 'Path to create')
-  .option('-t,--template <template>', 'Type of template', /^default|mongodb|postgresql|markdown|websocket$/) 
+  .option('-t,--template <template>', 'Type of template', /^default|mongodb|postgresql|mysql|markdown|websocket$/) 
   .option('-y,--yes <yes>', 'don\'t comfirm to create after', prog.BOOL, false, false)
   .action(function(args, options, logger) {
     const name = args.path;
