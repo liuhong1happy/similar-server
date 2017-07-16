@@ -19,7 +19,7 @@
 - [Controller](api/controller.md)
 - [View](api/view.md)
 - [Model](api/model.md)
-- [Router/Route](router.md)
+- [Router/Route](api/router.md)
 
 ## 联系
 
