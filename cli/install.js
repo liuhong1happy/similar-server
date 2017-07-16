@@ -78,7 +78,7 @@ const createProject = function (name, template, options) {
   const copy = function() {
     process.chdir(curPath);
     let copyCommand =  `cp -rf ${tmplPath}/. ${root}`;
-    if(process.platform === 'win32') copyCommand = `xcopy ${tmplPath} ${root} /y /s`
+    if(process.platform === 'win32') copyCommand = `xcopy ${tmplPath} ${root} /y /s`;
     try {
         execSync(copyCommand, {stdio: 'inherit'});
         console.error('Command `' + copyCommand + '` exec.');

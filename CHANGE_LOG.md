@@ -18,3 +18,5 @@
 
 1. 新增多个模版websocket、markdown
 2. 完善正则路由匹配规则
+3. 修复缺失mime库的问题
+4. 添加对windows创建项目的支持

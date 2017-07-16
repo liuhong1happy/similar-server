@@ -76,7 +76,8 @@ const deployProject = function (server, name, tool, options) {
 
   const copy = function() {
     process.chdir(curPath);
-    const copyCommand =  `cp -rf ${tmpRoot}/. ${root}`;
+    let copyCommand =  `cp -rf ${tmpRoot}/. ${root}`;
+    if(process.platform === 'win32') copyCommand = `xcopy ${tmplPath} ${root} /y /s`;
     try {
         execSync(copyCommand, {stdio: 'inherit'});
         console.error('Command `' + copyCommand + '` exec.');
