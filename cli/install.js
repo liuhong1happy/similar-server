@@ -77,7 +77,8 @@ const createProject = function (name, template, options) {
 
   const copy = function() {
     process.chdir(curPath);
-    const copyCommand =  `cp -rf ${tmplPath}/. ${root}`;
+    let copyCommand =  `cp -rf ${tmplPath}/. ${root}`;
+    if(process.platform === 'win32') copyCommand = `xcopy ${tmplPath} ${root} /y /s`
     try {
         execSync(copyCommand, {stdio: 'inherit'});
         console.error('Command `' + copyCommand + '` exec.');
@@ -103,7 +104,8 @@ const createProject = function (name, template, options) {
         "babel-preset-env": "^1.4.0",
         "babel-preset-power-assert": "^1.0.0",
         "nodemon": "^1.11.0",
-        "webpack": "^2.6.0"
+        "webpack": "^2.6.0",
+        "mime": "^1.3.6"
       },
       dependencies: {
         "babel-polyfill": "^6.23.0",
