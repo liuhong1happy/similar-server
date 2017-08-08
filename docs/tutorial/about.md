@@ -1,3 +1,16 @@
+<!-- TOC -->
+
+- [关于similar-server](#关于similar-server)
+    - [类似Express容易上手](#类似express容易上手)
+    - [采用MVC框架](#采用mvc框架)
+    - [命令行工具快速创建项目](#命令行工具快速创建项目)
+    - [用一种独特的方式书写路由](#用一种独特的方式书写路由)
+    - [区分插件和路由定义](#区分插件和路由定义)
+    - [路由匹配规则](#路由匹配规则)
+    - [Controller支持自定义方法](#controller支持自定义方法)
+
+<!-- /TOC -->
+
 # 关于similar-server
 
 Node在ES6和ES7时代的Web Server。

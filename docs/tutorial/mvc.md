@@ -1,3 +1,15 @@
+<!-- TOC -->
+
+- [理解Similar Server中的MVC框架](#理解similar-server中的mvc框架)
+    - [1. Controller](#1-controller)
+        - [1.1. HomeController](#11-homecontroller)
+        - [1.2. UserController](#12-usercontroller)
+    - [2. Model](#2-model)
+        - [2.1. 自定义数据](#21-自定义数据)
+        - [2.2. 数据库中的数据](#22-数据库中的数据)
+    - [3. View](#3-view)
+
+<!-- /TOC -->
 # 理解Similar Server中的MVC框架
 
 ## 1. Controller
