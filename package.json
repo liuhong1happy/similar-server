@@ -24,8 +24,9 @@
   "dependencies": {
     "caporal": "^0.5.0",
     "ejs": "^2.5.6",
-    "prompt": "^1.0.0",
-    "http-proxy": "^1.16.2"
+    "http-proxy": "^1.16.2",
+    "nodemailer": "^4.0.1",
+    "prompt": "^1.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

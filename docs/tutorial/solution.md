@@ -9,6 +9,8 @@
     - [4. 静态文件](#4-静态文件)
     - [5. 打印日志](#5-打印日志)
     - [6. 代理服务](#6-代理服务)
+    - [7. 验证码](#7-验证码)
+    - [8. 发送邮件](#8-发送邮件)
 
 <!-- /TOC -->
 
@@ -170,3 +172,62 @@ app.proxy('/api/(.+)', {target: 'http://api.example.com'})
 ```
 
 以`/api/`打头的路由，都会代理到`http://api.example.com`。
+
+## 7. 验证码
+
+获取验证码并将文本放置到session中。我们使用到第三方的验证码生产库`svg-captcha`。
+
+实现方式如下：
+
+```js
+var svgCaptcha = require('svg-captcha');
+
+app.route('/captcha', function (req, res) {
+	var captcha = svgCaptcha.create();
+	req.session.captcha = captcha.text;
+	
+	res.setHeader('Content-Type', 'image/svg+xml');
+    res.write(captcha.data);
+    res.end();
+});
+```
+
+注意：当然`session`需要用到之前讲解的方式添加支持，才可以使用。
+
+
+## 8. 发送邮件
+
+参见[nodemailer](https://nodemailer.com/about/)
+
+```js
+'use strict';
+const nodemailer = require('nodemailer');
+
+// create reusable transporter object using the default SMTP transport
+let transporter = nodemailer.createTransport({
+    host: 'smtp.example.com',
+    port: 25,
+    secure: false, // secure:true for port 465, secure:false for port 587
+    auth: {
+        user: 'username@example.com',
+        pass: 'password'
+    }
+});
+
+// setup email data with unicode symbols
+let mailOptions = {
+    from: '"username" <username@example.com>', // sender address
+    to: 'username2@example.com', // list of receivers
+    subject: 'Hello ✔', // Subject line
+    text: 'Hello world ?', // plain text body
+    html: '<b>Hello world ?</b>' // html body
+};
+
+// send mail with defined transport object
+transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log(error);
+    }
+    console.log('Message %s sent: %s', info.messageId, info.response);
+});
+```
