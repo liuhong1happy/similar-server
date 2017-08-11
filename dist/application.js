@@ -34,13 +34,12 @@ exports.default = function () {
     app._router = {
         plugins: [],
         children: []
-    };
-    /**
-     * 匹配路由
-     * 1. 普通路由规则 /api/:api
-     * 2. 正则路由规则 /api/(.+)
-     */
-    app.match = function (url) {
+        /**
+         * 匹配路由
+         * 1. 普通路由规则 /api/:api
+         * 2. 正则路由规则 /api/(.+)
+         */
+    };app.match = function (url) {
         var matchLocation = function matchLocation(location, url) {
             var locations = location.split("/");
             var hashs = url.split("/");
