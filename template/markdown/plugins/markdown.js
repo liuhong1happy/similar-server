@@ -7,7 +7,9 @@ const MarkdownPlugin = function(assetsDir) {
     return function Markdown(request, response, next) {
         const obj = url.parse(request.url);
         const pathname = obj.pathname;
+        console.log(obj);
         const realPath = path.join(assetsDir, path.normalize(pathname.replace(/\.\./g, "")));
+        console.log(realPath);
         const pathHandle = function(realPath){
             //用fs.stat方法获取文件
             fs.stat(realPath,function(err,stats){
@@ -20,12 +22,10 @@ const MarkdownPlugin = function(assetsDir) {
                         let ext = path.extname(realPath);
                         ext = ext ? ext.slice(1) : 'unknown';
                         if(ext!=='md') next();
-
-                        const { error, str } = fs.readFileSync(path, 'utf8');
-
-                        if(error) next();
-                        else response.write(marked.parse(str));
-                        response.setHeader("Content-Type", 'text/html');
+                        
+                        const str = fs.readFileSync(realPath, 'utf8');
+                        response.setHeader("Content-Type", 'text/html;charset=utf-8');
+                        response.write(marked.parse(str));
                         response.end();
                     }
                 }
