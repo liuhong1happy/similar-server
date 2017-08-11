@@ -12,7 +12,7 @@ exports.default = function (assetsDir) {
         var pathHandle = function pathHandle(realPath) {
             //用fs.stat方法获取文件
             try {
-                var stats = _fs2.default.stat(realPath);
+                var stats = _fs2.default.statSync(realPath);
                 if (stats.isDirectory()) {
                     next();
                 } else {
