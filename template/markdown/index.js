@@ -3,7 +3,7 @@ import Markdown from './plugins/markdown';
 
 const app = Application();
 // static plugin
-app.plugins(Markdown('views'));
+app.plugin(Markdown('views'));
 // init routes & plugins
 app.init();
 // listen 3002 port
