@@ -1,3 +1,15 @@
+<!-- TOC -->
+
+- [Model](#model)
+    - [类方法列表](#类方法列表)
+            - [`Model.set(key, value)`](#modelsetkey-value)
+            - [`Model.get(key)`](#modelgetkey)
+            - [`Model.getData()`](#modelgetdata)
+            - [`Model.setData(data)`](#modelsetdatadata)
+    - [实例变量列表](#实例变量列表)
+            - [`this.data`](#thisdata)
+
+<!-- /TOC -->
 # Model
 
 可供继承的模型。

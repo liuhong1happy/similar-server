@@ -1,3 +1,15 @@
+<!-- TOC -->
+
+- [View](#view)
+    - [`RenderAPI()`](#renderapi)
+    - [`RenderView(view, engine, options = {})`](#renderviewview-engine-options--)
+    - [Get(path)](#getpath)
+    - [POST(path)](#postpath)
+    - [Put(path)](#putpath)
+    - [Delete(path)](#deletepath)
+
+<!-- /TOC -->
+
 # View
 
 View中包含了很多使用的方法，具体方法列表如下：

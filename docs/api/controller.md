@@ -1,3 +1,14 @@
+<!-- TOC -->
+
+- [Controller](#controller)
+    - [类方法列表](#类方法列表)
+            - [`Controller.GET(req, res, next, params)`](#controllergetreq-res-next-params)
+            - [`Controller.POST(req, res, next, params)`](#controllerpostreq-res-next-params)
+            - [`Controller.PUT(req, res, next, params)`](#controllerputreq-res-next-params)
+            - [`Controller.DELETE(req, res, next, params)`](#controllerdeletereq-res-next-params)
+
+<!-- /TOC -->
+
 # Controller
 
 可供继承的类，已实现加入到路由的处理实例。

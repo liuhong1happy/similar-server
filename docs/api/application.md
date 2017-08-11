@@ -1,3 +1,20 @@
+
+<!-- TOC -->
+
+- [Application](#application)
+    - [构建项目单例](#构建项目单例)
+    - [单例方法列表](#单例方法列表)
+            - [`app.router(router)`](#approuterrouter)
+            - [`app.route(path,handle)`](#approutepathhandle)
+            - [`app.use(plugin)`](#appuseplugin)
+            - [`app.plugin(plugin)`](#apppluginplugin)
+            - [`app.proxy(url)`](#appproxyurl)
+            - [`app.static(path)`](#appstaticpath)
+            - [`app.init()`](#appinit)
+            - [`app.listen(port)`](#applistenport)
+
+<!-- /TOC -->
+
 # Application
 
 主要控制相关插件和路由的加载，整个项目的启动。

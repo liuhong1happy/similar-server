@@ -118,6 +118,7 @@ const createProject = function (name, template, options) {
     if(template==='postgresql') installCommand+= ' && npm install --save sequelize pg pg-hstore pg-native';
     if(template==='mysql') installCommand+= ' && npm install --save sequelize mysql mysql2';
     if(template==='websocket') installCommand+= ' && npm install --save socket.io';
+    if(template==='markdown') installCommand+= ' && npm install --save marked';
     try {
         execSync(installCommand, {stdio: 'inherit'});
         console.error('Command `' + installCommand + '` exec.');

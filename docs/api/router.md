@@ -1,3 +1,11 @@
+<!-- TOC -->
+
+- [路由](#路由)
+    - [Router(path, controllerInstance or array)](#routerpath-controllerinstance-or-array)
+    - [Route(path, controllerInstance or array)](#routepath-controllerinstance-or-array)
+
+<!-- /TOC -->
+
 # 路由
 
 路由由Router和Route共同实现。
