@@ -10,6 +10,10 @@ var _http = require('http');
 
 var _http2 = _interopRequireDefault(_http);
 
+var _https = require('https');
+
+var _https2 = _interopRequireDefault(_https);
+
 var _static = require('./static');
 
 var _static2 = _interopRequireDefault(_static);
@@ -111,6 +115,9 @@ exports.default = function () {
             });
         };
         var handlers = parseUrlByRouteTable(app.routeTable, url);
+        // 优先解析插件确定的路由
+        // 其次解析普通路由规则
+        // 最后解析正则路由规则
         return app.routePlugins.concat(handlers);
     };
     /**
@@ -221,6 +228,23 @@ exports.default = function () {
     app.listen = function () {
         var server = _http2.default.createServer(this);
         return server.listen.apply(server, arguments);
+    };
+
+    app.https = {
+        parent: app,
+        credentials: null,
+        listen: function listen() {
+            var server = _https2.default.createServer(this.credentials, this.parent);
+            return server.listen.apply(server, arguments);
+        }
+    };
+
+    app.http = {
+        parent: app,
+        listen: function listen() {
+            var server = _http2.default.createServer(this.parent);
+            return server.listen.apply(server, arguments);
+        }
     };
 
     return app;
