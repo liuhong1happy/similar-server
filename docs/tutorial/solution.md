@@ -166,12 +166,34 @@ app.plugins(log4js.connectLogger(log4js.getLogger('access'), { level: log4js.lev
 
 默认提供了`http-proxy`代理服务，具体使用方式为：
 
+大部分代理参数参考：https://github.com/nodejitsu/node-http-proxy#options
+pathRewrite代理参数参考：https://github.com/chimurai/http-proxy-middleware#http-proxy-middleware-options
+
 ```js
 // http proxy
-app.proxy('/api/(.+)', {target: 'http://api.example.com'})
+app.proxy('/api/v1/(.+)', {
+    target: 'http://api.example.com',
+    pathRewrite: {
+        '/v1': ''
+    },
+    changeOrigin: true
+})
+// https proxy
+const privateKey  = fs.readFileSync(path.resolve(process.cwd(), '214343096180428.key'), 'utf8');
+const certificate = fs.readFileSync(path.resolve(process.cwd(), '214343096180428.pem'), 'utf8');
+const credentials = {key: privateKey, cert: certificate};
+app.proxy('/api/v2/(.+)', {
+    target: 'https://api.v2.example.com',
+    ssl: credentials,
+    pathRewrite: {
+        '/v2': ''
+    },
+    changeOrigin: true
+})
 ```
 
-以`/api/`打头的路由，都会代理到`http://api.example.com`。
+以`/api/v1/`打头的路由，都会代理到`http://api.example.com`。
+以`/api/v2/`打头的路由，都会代理到`https://api.v2.example.com`。
 
 ## 7. 验证码
 
