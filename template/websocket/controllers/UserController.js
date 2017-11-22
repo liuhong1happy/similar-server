@@ -5,14 +5,10 @@ import ResultModel from '../models/ResultModel';
 class UserController extends Controller {
     @RenderAPI()
     GET(req, res, next, params) {
-        const model = new ResultModel();
-        model.Status = 'success';
-        model.Data = {
+        return new ResultModel(ResultModel.Success, '', {
             firstName: 'Holly',
             lastName: 'Liu'
-        };
-        model.Msg = '';
-        return model;
+        });
     }
 }
 
